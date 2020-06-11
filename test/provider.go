@@ -1,4 +1,4 @@
-package github
+package test
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
