@@ -6,23 +6,11 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
-	"reflect"
+//	"reflect"
+//	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
-
-
-type Step struct {
-	Steps []*Step
-}
-
-type StepAttr struct {
-	program            []string
-	working_dir        string
-	query              map[string][]string
-	expect             map[string]string
-}
-
 
 func dataSourceTestScenario() *schema.Resource {
 	return &schema.Resource{
@@ -71,7 +59,7 @@ func dataSourceTestScenario() *schema.Resource {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
-					Type: schema.TypeBool,
+					Type: schema.TypeString,
 				},
 			},
 			"raw_result": {
@@ -86,9 +74,11 @@ func dataSourceTestScenario() *schema.Resource {
 }
 
 func dataSourceTestScenarioRead(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[TRACE] Begin dataSourceTestScenarioRead")
 	if rawSteps, hasRawSteps := d.GetOk("step"); hasRawSteps {
+		log.Printf("[TRACE] hasRawSteps true")
 		var rawStepIntfs = rawSteps.([]interface{})
-		steps := make([]bool, len(rawStepIntfs))
+		steps := make([]string, len(rawStepIntfs))
 		results := make([]map[string]string, len(rawStepIntfs))
 
 		for i, stepI := range rawStepIntfs {
@@ -148,12 +138,25 @@ func dataSourceTestScenarioRead(d *schema.ResourceData, meta interface{}) error 
 				return fmt.Errorf("command %q produced invalid JSON: %s", program[0], err)
 			}
 
-			steps[i] = reflect.DeepEqual(result, mapStringExpect)
+			expectString, _ := json.Marshal(mapStringExpect)
+			resultString, _ := json.Marshal(result)
+                        log.Printf("[TRACE] JSON expectString output: %+v\n", expectString)
+                        log.Printf("[TRACE] JSON resultString output: %+v\n", resultString)
+
+			if Equal(expectString, resultString) {
+				steps[i] = "PASS"
+                	        log.Printf("[TRACE] expectString and resultString are equal")
+			} else {
+				steps[i] = "FAIL"
+                        	log.Printf("[TRACE] expectString and resultString are not equal")
+			}
 			results[i] = result
 
-			return nil
+//			return nil
 		}
+		log.Println("[TRACE] steps", steps)
 		d.Set("result", steps)
+		log.Println("[TRACE] raw_results", results)
 		d.Set("raw_result", results)
 
 		d.SetId("-")
