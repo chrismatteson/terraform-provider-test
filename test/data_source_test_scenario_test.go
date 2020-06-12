@@ -16,35 +16,28 @@ import (
 const testDataSourceConfig_basic = `
 data "test_scenario" "test" {
   step {
-    program = ["%s", "cheese"]
-
-    query = {
-      value = "pizza"
-    }
+    program = ["echo", "{\"foo\": \"bar\"}"]
+    expect  = {"foo" = "bar"}
   }
 }
 
-output "query_value" {
-  value = "${data.test_scenario.test.result["query_value"]}"
-}
-
-output "argument" {
-  value = "${data.test_scenario.test.result["argument"]}"
+output "result" {
+  value = "${data.test_scenario.test.result}"
 }
 `
 
 func TestDataSource_basic(t *testing.T) {
-	programPath, err := buildDataSourceTestProgram()
-	if err != nil {
-		t.Fatal(err)
-		return
-	}
+//	programPath, err := buildDataSourceTestProgram()
+//	if err != nil {
+//		t.Fatal(err)
+//		return
+//	}
 
 	resource.UnitTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testDataSourceConfig_basic, programPath),
+				Config: testDataSourceConfig_basic,
 				Check: func(s *terraform.State) error {
 					_, ok := s.RootModule().Resources["data.test_scenario.test"]
 					if !ok {
@@ -53,26 +46,16 @@ func TestDataSource_basic(t *testing.T) {
 
 					outputs := s.RootModule().Outputs
 
-					if outputs["argument"] == nil {
-						return fmt.Errorf("missing 'argument' output")
-					}
-					if outputs["query_value"] == nil {
-						return fmt.Errorf("missing 'query_value' output")
+					if outputs["result"] == nil {
+						return fmt.Errorf("missing 'result' output")
 					}
 
-					if outputs["argument"].Value != "cheese" {
-						return fmt.Errorf(
-							"'argument' output is %q; want 'cheese'",
-							outputs["argument"].Value,
-						)
-					}
-					if outputs["query_value"].Value != "pizza" {
-						return fmt.Errorf(
-							"'query_value' output is %q; want 'pizza'",
-							outputs["query_value"].Value,
-						)
-					}
-
+					//if outputs["result"].Value != [true]  {
+					//	return fmt.Errorf(
+					//		"result is false, want true",
+					//		outputs["result"].Value,
+					//	)
+					//}
 					return nil
 				},
 			},
