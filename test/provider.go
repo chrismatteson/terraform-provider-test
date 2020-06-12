@@ -6,9 +6,10 @@ import (
 )
 
 func Provider() terraform.ResourceProvider {
-	p := &schema.Provider{
+	return &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
-			"test_scenario":           dataSourceTestScenario(),
+			"test_scenario": dataSourceTestScenario(),
 		},
+		ResourcesMap: map[string]*schema.Resource{},
 	}
 }

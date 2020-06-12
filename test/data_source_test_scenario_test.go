@@ -82,10 +82,12 @@ func TestDataSource_basic(t *testing.T) {
 
 const testDataSourceConfig_error = `
 data "test_scenario" "test" {
-  program = ["%s"]
+  step {
+    program = ["%s"]
 
-  query = {
-    fail = "true"
+    query = {
+      fail = "true"
+    }
   }
 }
 `
