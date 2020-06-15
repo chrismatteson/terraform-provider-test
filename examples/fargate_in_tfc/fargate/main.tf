@@ -96,4 +96,6 @@ data "aws_network_interface" "interface" {
     name   = "subnet-id"
     values = module.vpc.public_subnets
   }
+
+  depends_on = [aws_ecs_service.nginx]
 }
