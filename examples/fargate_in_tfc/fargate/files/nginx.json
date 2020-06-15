@@ -1,0 +1,20 @@
+[
+  {
+    "name": "nginx-service",
+    "image": "nginxdemos/hello",
+    "cpu": 256,
+    "memory": 512,
+    "essential": true,
+    "environment": [
+      {
+        "name": "EXAMPLE_VARIABLE",
+        "value": "false"
+      }
+    ],
+    "portMappings": [
+      {
+        "containerPort": 80
+      }
+    ]
+  }
+]
