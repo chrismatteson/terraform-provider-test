@@ -11,7 +11,7 @@ data terraform_remote_state "fargate" {
 
 data test_scenario "fargate" {
   step {
-    program = ["curl", "-o", "/dev/null", "-s", "-w", "{\"response_code\":\"%%{http_code}\"}", element(data.terraform_remote_state.fargate.outputs.network_interface_association, 0)[public_ip]]
+    program = ["curl", "-o", "/dev/null", "-s", "-w", "{\"response_code\":\"%%{http_code}\"}", element(data.terraform_remote_state.fargate.outputs.network_interface_association, 0)["public_ip"]]
     expect = { "response_code" = "200" }
   }
 }
