@@ -89,6 +89,12 @@ resource "aws_ecs_service" "nginx" {
     subnets          = module.vpc.public_subnets
     assign_public_ip = true
   }
+
+# Need to wait for container to be provisioned and assigned an IP for the network
+# interface data source to be successful
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
 }
 
 data "aws_network_interface" "interface" {
