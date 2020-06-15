@@ -27,11 +27,11 @@ output "result" {
 `
 
 func TestDataSource_basic(t *testing.T) {
-//	programPath, err := buildDataSourceTestProgram()
-//	if err != nil {
-//		t.Fatal(err)
-//		return
-//	}
+	//	programPath, err := buildDataSourceTestProgram()
+	//	if err != nil {
+	//		t.Fatal(err)
+	//		return
+	//	}
 
 	resource.UnitTest(t, resource.TestCase{
 		Providers: testProviders,

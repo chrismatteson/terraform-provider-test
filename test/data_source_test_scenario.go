@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
-//	"reflect"
-//	"strconv"
+	//	"reflect"
+	//	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -44,7 +44,6 @@ func dataSourceTestScenario() *schema.Resource {
 							},
 						},
 
-
 						"expect": {
 							Type:     schema.TypeMap,
 							Required: true,
@@ -63,7 +62,7 @@ func dataSourceTestScenario() *schema.Resource {
 				},
 			},
 			"raw_result": {
-				Type:	schema.TypeList,
+				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeMap,
@@ -91,7 +90,7 @@ func dataSourceTestScenarioRead(d *schema.ResourceData, meta interface{}) error 
 			mapStringExpect := make(map[string]string)
 
 			for key, value := range expect {
-			        strValue := fmt.Sprintf("%v", value)
+				strValue := fmt.Sprintf("%v", value)
 				mapStringExpect[key] = strValue
 			}
 
@@ -140,19 +139,19 @@ func dataSourceTestScenarioRead(d *schema.ResourceData, meta interface{}) error 
 
 			expectString, _ := json.Marshal(mapStringExpect)
 			resultString, _ := json.Marshal(result)
-                        log.Printf("[TRACE] JSON expectString output: %+v\n", expectString)
-                        log.Printf("[TRACE] JSON resultString output: %+v\n", resultString)
+			log.Printf("[TRACE] JSON expectString output: %+v\n", expectString)
+			log.Printf("[TRACE] JSON resultString output: %+v\n", resultString)
 
 			if Equal(expectString, resultString) {
 				steps[i] = "PASS"
-                	        log.Printf("[TRACE] expectString and resultString are equal")
+				log.Printf("[TRACE] expectString and resultString are equal")
 			} else {
 				steps[i] = "FAIL"
-                        	log.Printf("[TRACE] expectString and resultString are not equal")
+				log.Printf("[TRACE] expectString and resultString are not equal")
 			}
 			results[i] = result
 
-//			return nil
+			//			return nil
 		}
 		log.Println("[TRACE] steps", steps)
 		d.Set("result", steps)
