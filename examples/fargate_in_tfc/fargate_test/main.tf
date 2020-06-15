@@ -18,6 +18,6 @@ data test_scenario "fargate" {
 
 resource null_resource "trigger" {
   triggers = {
-    trigger = data.test_scenario.fargate.result
+    trigger = join(",", data.test_scenario.fargate.result)
   }
 }
