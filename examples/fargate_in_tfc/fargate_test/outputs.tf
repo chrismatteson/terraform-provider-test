@@ -1,3 +1,3 @@
 output "results" {
-  value = test_scenario.fargate.results
+  value = data.test_scenario.fargate.results
 }
