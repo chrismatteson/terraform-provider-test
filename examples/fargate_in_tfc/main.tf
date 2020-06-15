@@ -29,6 +29,7 @@ resource "tfe_workspace" "fargate_test" {
   name              = "fargate_test"
   organization      = var.organization
   working_directory = "examples/fargate_in_tfc/fargate_test"
+  auto_apply        = true
 
   vcs_repo {
     identifier     = "chrismatteson/terraform-provider-test"
