@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "nginx" {
 }
 
 resource "aws_iam_role" "execution" {
-  name = "execution_role"
+  name = "${random_id.project_tag.hex}_execution_role"
 
   assume_role_policy = <<EOF
 {

@@ -2,6 +2,7 @@ resource "tfe_workspace" "fargate" {
   name              = "fargate"
   organization      = var.organization
   working_directory = "examples/fargate_in_tfc/fargate"
+  auto_apply        = true
 
   vcs_repo {
     identifier     = "chrismatteson/terraform-provider-test"
@@ -20,6 +21,7 @@ resource "tfe_variable" "aws_secret_access_key" {
   key          = "AWS_SECRET_ACCESS_KEY"
   value        = var.aws_secret_access_key
   category     = "env"
+  sensitive    = true
   workspace_id = tfe_workspace.fargate.id
 }
 
@@ -43,7 +45,7 @@ resource "tfe_variable" "organization" {
 
 resource "tfe_variable" "workspace" {
   key          = "workspace"
-  value        = tfe_workspace.fargate.id
+  value        = tfe_workspace.fargate.name
   category     = "terraform"
   workspace_id = tfe_workspace.fargate_test.id
 }
