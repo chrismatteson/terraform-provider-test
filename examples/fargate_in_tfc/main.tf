@@ -50,3 +50,8 @@ resource "tfe_variable" "workspace" {
   category     = "terraform"
   workspace_id = tfe_workspace.fargate_test.id
 }
+
+resource "tfe_run_trigger" "trigger" {
+  workspace_id  = tfe_workspace.fargate_test.id
+  sourceable_id = tfe_workspace.fargate.id
+}

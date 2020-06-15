@@ -16,8 +16,8 @@ data test_scenario "fargate" {
   }
 }
 
-#resource null_resource "trigger" {
-#  triggers = {
-#    trigger = join(",", data.test_scenario.fargate.result)
-#  }
-#}
+resource null_resource "trigger" {
+  triggers = {
+    trigger = join(",", data.test_scenario.fargate.result)
+  }
+}
